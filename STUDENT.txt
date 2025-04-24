@@ -1,0 +1,5 @@
+# Masukkan API Key jika diperlukan oleh Map Service (misal: MapTiler)
+# Contoh:
+MAPTILER_API_KEY=JLMxlRyYMX9bMXScvs6o
+
+# Jika menggunakan OpenStreetMap default, file ini bisa kosong.
