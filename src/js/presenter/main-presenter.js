@@ -55,6 +55,9 @@ class MainPresenter {
                             icon: 'success',
                             timer: 1500, // Tutup otomatis setelah 1.5 detik
                             showConfirmButton: false
+                         }).then(() => {
+                             // Arahkan ke halaman login setelah logout
+                             window.location.hash = '#/login';
                          });
                      }
                  });
@@ -79,7 +82,6 @@ class MainPresenter {
              });
          }
     }
-
 
     _updateNavigation() {
         const isLoggedIn = AuthModel.isLoggedIn();
