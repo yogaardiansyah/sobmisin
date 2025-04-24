@@ -9,28 +9,32 @@ if (!mainContent) {
 }
 
 const mainView = new MainView(mainContent);
-const mainPresenter = new MainPresenter(mainView); // Inject the view
+const mainPresenter = new MainPresenter(mainView);
 
 const routes = {
   '/login': () => mainPresenter.showLoginPage(),
   '/register': () => mainPresenter.showRegisterPage(),
-  '/': () => mainPresenter.showHomePage(), // Root redirects to home
+  '/': () => mainPresenter.showHomePage(),
   '/home': () => mainPresenter.showHomePage(),
-  '/add-story': () => mainPresenter.showAddStoryPage(),
-  // '/detail/:id': (id) => mainPresenter.showDetailPage(id), // Example for detail page
+  '/add-story': () => mainPresenter.showAddStoryPage(), // Rute target
 };
 
-const publicRoutes = ['/login', '/register']; // Routes accessible without login
+const publicRoutes = ['/login', '/register'];
+
+// --- PERUBAHAN DI SINI ---
+// Definisikan rute yang bisa diakses tamu meskipun bukan public (login/register)
+const guestAccessibleRoutes = ['/add-story'];
+// --------------------------
 
 const handleRouteChange = () => {
   const hash = window.location.hash.substring(1) || '/';
-  const [path, param] = hash.split('/').filter(s => s); // Handle potential params like /detail/id
-  const baseRoute = `/${path || ''}`; // Use '/' for empty path
+  const [path, param] = hash.split('/').filter(s => s);
+  const baseRoute = `/${path || ''}`;
 
   console.log(`Routing attempt: hash='${hash}', baseRoute='${baseRoute}', param='${param}'`);
 
 
-  const handler = routes[baseRoute] || null; // Find the handler function
+  const handler = routes[baseRoute] || null;
 
   const isLoggedIn = AuthModel.isLoggedIn();
 
@@ -38,19 +42,22 @@ const handleRouteChange = () => {
   if (isLoggedIn && publicRoutes.includes(baseRoute)) {
     console.log('Already logged in, redirecting to home');
     window.location.hash = '/home';
-    return; // Stop further processing
+    return;
   }
 
-  // Redirect non-logged-in users trying to access protected routes
-  if (!isLoggedIn && !publicRoutes.includes(baseRoute) && baseRoute !== '/') { // Allow access to root initially
-     console.log('Not logged in, redirecting to login');
+  // --- PERUBAHAN DI SINI ---
+  // Redirect non-logged-in users trying to access protected routes,
+  // KECUALI rute tersebut ada di guestAccessibleRoutes
+  if (!isLoggedIn && !publicRoutes.includes(baseRoute) && !guestAccessibleRoutes.includes(baseRoute) && baseRoute !== '/') {
+     console.log('Not logged in and accessing protected route, redirecting to login for route:', baseRoute);
      window.location.hash = '/login';
-     return; // Stop further processing
+     return;
   }
+  // --------------------------
+
 
   if (handler) {
      console.log(`Executing handler for: ${baseRoute}`);
-     // Pass param if the handler expects it (e.g., for detail page)
      if (param && typeof handler === 'function' && handler.length === 1) {
          handler(param);
      } else if (typeof handler === 'function') {
@@ -58,7 +65,7 @@ const handleRouteChange = () => {
      }
   } else {
      console.log(`No handler found for route: ${baseRoute}. Showing 404.`);
-     mainPresenter.showNotFoundPage(); // Show a 404 page
+     mainPresenter.showNotFoundPage();
   }
 };
 
@@ -66,7 +73,7 @@ const initRouter = () => {
   window.addEventListener('hashchange', handleRouteChange);
   window.addEventListener('DOMContentLoaded', () => {
     console.log('DOM Loaded, initial route check.');
-    handleRouteChange(); // Handle initial route
+    handleRouteChange();
   });
 };
 
