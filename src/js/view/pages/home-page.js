@@ -1,4 +1,3 @@
-// src/js/view/pages/home-page.js
 import createStoryItemTemplate from '../templates/story-item-template.js';
 import AuthModel from '../../model/auth-model.js'; // To greet the user
 
@@ -17,14 +16,13 @@ const HomePage = {
                 </section>
                 <hr>
                 <h3>Stories Location</h3>
-                 <section id="storiesMapContainer" aria-label="Map showing story locations">
-                     <div id="storiesMap" class="map-display"></div>
-                 </section>
+                <section id="storiesMapContainer" aria-label="Map showing story locations" style="position: relative;">
+                    <div id="storiesMap" class="map-display"></div>
+                    <div class="map-overlay" aria-hidden="true"></div>
+                </section>
             </div>
         `;
     }
-    // Setup logic (like map initialization) is handled by the StoryPresenter
-    // after this render function is called by the MainView.
 };
 
 export default HomePage;

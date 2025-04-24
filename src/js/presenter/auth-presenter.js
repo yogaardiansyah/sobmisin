@@ -1,55 +1,73 @@
 // src/js/presenter/auth-presenter.js
 import StoryApiSource from '../data/story-api-source.js';
 import AuthModel from '../model/auth-model.js';
+import Swal from 'sweetalert2'; // Import Swal
 
 class AuthPresenter {
     constructor({ view }) {
-        this._view = view;
-        // No initial API calls needed for login/register pages usually
+        this._view = view; // Ini akan di-override oleh viewUtils dari login/register page
     }
 
+    // --- Perubahan handleLogin ---
     async handleLogin(email, password) {
         if (!email || !password) {
-            this._view.showError('Email and password are required.');
+            Swal.fire('Validation Error', 'Email and password are required.', 'warning'); // Gunakan Swal
             return;
         }
-        this._view.showLoading(); // Show loading indicator in the specific view/form
+        this._view.showLoading(); // Panggil showLoading dari viewUtils
+        this._view.clearError(); // Bersihkan error lama
+
         try {
             const response = await StoryApiSource.login({ email, password });
             if (!response.error) {
                 AuthModel.saveCredentials(response.loginResult);
-                this._view.clearError(); // Clear any previous error
-                // Dispatch auth change event
                 document.dispatchEvent(new CustomEvent('auth-change', { detail: { loggedIn: true } }));
-                window.location.hash = '#/home'; // Navigate to home
+                // Tampilkan notifikasi sukses
+                 Swal.fire({
+                     icon: 'success',
+                     title: 'Login Successful!',
+                     text: `Welcome back, ${response.loginResult.name}!`,
+                     timer: 1500, // Tutup otomatis
+                     showConfirmButton: false
+                 }).then(() => {
+                     window.location.hash = '#/home'; // Navigate setelah notif ditutup
+                 });
             } else {
-                this._view.showError(response.message || 'Login failed.');
+                this._view.showError(response.message || 'Login failed.'); // Tampilkan error di view
             }
         } catch (error) {
             console.error('Login Error:', error);
-            this._view.showError(error.message || 'An error occurred during login.');
+            this._view.showError(error.message || 'An error occurred during login.'); // Tampilkan error di view
         } finally {
-            this._view.hideLoading();
+            this._view.hideLoading(); // Panggil hideLoading dari viewUtils
         }
     }
 
+    // --- Perubahan handleRegister ---
     async handleRegister(name, email, password) {
         if (!name || !email || !password) {
-            this._view.showError('Name, email, and password are required.');
-            return;
+             Swal.fire('Validation Error','Name, email, and password are required.', 'warning');
+             return;
         }
         if (password.length < 8) {
-            this._view.showError('Password must be at least 8 characters long.');
-            return;
+             Swal.fire('Validation Error','Password must be at least 8 characters long.', 'warning');
+             return;
         }
         this._view.showLoading();
+        this._view.clearError();
+
         try {
             const response = await StoryApiSource.register({ name, email, password });
             if (!response.error) {
-                this._view.clearError();
-                 // Optionally show a success message before redirecting
-                alert('Registration successful! Please login.');
-                window.location.hash = '#/login'; // Navigate to login page
+                // Tampilkan notifikasi sukses registrasi
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registration Successful!',
+                    text: 'Your account has been created. Please login.',
+                    confirmButtonText: 'Go to Login'
+                }).then(() => {
+                     window.location.hash = '#/login'; // Navigate ke login setelah OK
+                });
             } else {
                 this._view.showError(response.message || 'Registration failed.');
             }
@@ -63,8 +81,8 @@ class AuthPresenter {
 
     handleLogout() {
         AuthModel.clearCredentials();
-        // Dispatch auth change event handled in model now
-        window.location.hash = '#/login'; // Navigate to login after logout
+        // Navigasi sudah di handle di MainPresenter setelah konfirmasi Swal
+        // window.location.hash = '#/login';
     }
 }
 

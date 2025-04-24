@@ -10,7 +10,7 @@ html {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   background-color: #f4f7f9; /* Warna latar belakang lembut */
   color: #333;
@@ -70,56 +70,56 @@ button {
 }
 
 .app-header__content {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .app-header h1 {
-    font-size: 1.6rem;
-    margin: 0;
-    color: #0056b3; /* Biru lebih gelap */
+  font-size: 1.6rem;
+  margin: 0;
+  color: #0056b3; /* Biru lebih gelap */
 }
 
 .app-navigation ul {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .app-navigation li {
-    margin-left: 1.5rem;
+  margin-left: 1.5rem;
 }
 
-.app-navigation a, .logout-button {
-    color: #333;
-    font-weight: 500;
-    padding: 0.5rem 0;
-    position: relative;
-    background: none;
-    border: none;
-    font-size: 1rem;
+.app-navigation a,
+.logout-button {
+  color: #333;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  position: relative;
+  background: none;
+  border: none;
+  font-size: 1rem;
 }
 .app-navigation a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #007bff;
-    transition: width 0.3s ease;
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #007bff;
+  transition: width 0.3s ease;
 }
 .app-navigation a:hover::after,
 .app-navigation a:focus::after {
-    width: 100%;
+  width: 100%;
 }
 
-
 .logout-button:hover {
-    color: #dc3545; /* Merah untuk logout hover */
+  color: #dc3545; /* Merah untuk logout hover */
 }
 
 main {
@@ -163,8 +163,9 @@ main {
   font-size: 1.2em;
   color: #555;
 }
-.loading-indicator.global-loading { /* Versi global di main content */
-    min-height: 200px; /* Beri tinggi agar terlihat */
+.loading-indicator.global-loading {
+  /* Versi global di main content */
+  min-height: 200px; /* Beri tinggi agar terlihat */
 }
 .loading-indicator .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
@@ -176,10 +177,13 @@ main {
   animation: spin 1s linear infinite;
 }
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-
 
 /* Error Message */
 .error-message {
@@ -191,25 +195,27 @@ main {
   margin-bottom: 1rem;
 }
 .error-container {
-    text-align: center;
+  text-align: center;
 }
 .error-container h2 {
-    color: #dc3545;
-    margin-bottom: 1rem;
+  color: #dc3545;
+  margin-bottom: 1rem;
 }
 
-
 /* Forms (Login, Register, Add Story) */
-.auth-form, .add-story-form {
+.auth-form,
+.add-story-form {
   display: flex;
   flex-direction: column;
   gap: 1.2rem; /* Jarak antar elemen form */
 }
-.auth-form .form-group, .add-story-form .form-group {
+.auth-form .form-group,
+.add-story-form .form-group {
   display: flex;
   flex-direction: column;
 }
-.auth-form label, .add-story-form label {
+.auth-form label,
+.add-story-form label {
   margin-bottom: 0.5rem;
   font-weight: 500;
   color: #495057;
@@ -225,16 +231,18 @@ main {
   font-size: 1rem;
 }
 .add-story-form textarea {
-    resize: vertical; /* Allow vertical resize only */
-    min-height: 80px;
+  resize: vertical; /* Allow vertical resize only */
+  min-height: 80px;
 }
 
-.auth-form input:focus, .add-story-form textarea:focus {
+.auth-form input:focus,
+.add-story-form textarea:focus {
   outline: none;
   border-color: #80bdff;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
-.auth-form button[type="submit"], .add-story-form button[type="submit"] {
+.auth-form button[type="submit"],
+.add-story-form button[type="submit"] {
   padding: 0.8rem 1.5rem;
   background-color: #007bff;
   color: white;
@@ -243,89 +251,96 @@ main {
   margin-top: 1rem; /* Jarak dari elemen terakhir */
   align-self: flex-start; /* Tombol tidak full width */
 }
-.auth-form button[type="submit"]:hover, .add-story-form button[type="submit"]:hover {
+.auth-form button[type="submit"]:hover,
+.add-story-form button[type="submit"]:hover {
   background-color: #0056b3;
 }
-.auth-form button[type="submit"]:disabled, .add-story-form button[type="submit"]:disabled {
-   background-color: #cccccc;
-   cursor: not-allowed;
+.auth-form button[type="submit"]:disabled,
+.add-story-form button[type="submit"]:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
-.login-container p, .register-container p {
-    margin-top: 1.5rem;
-    text-align: center;
+.login-container p,
+.register-container p {
+  margin-top: 1.5rem;
+  text-align: center;
 }
 
 /* Add Story Page Specific Styles */
 .add-story-form fieldset {
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 .add-story-form legend {
-    font-weight: 600;
-    padding: 0 0.5rem;
-    color: #0056b3;
+  font-weight: 600;
+  padding: 0 0.5rem;
+  color: #0056b3;
 }
 .camera-section .camera-area {
-    position: relative;
-    width: 100%;
-    max-width: 400px; /* Batasi lebar area kamera/preview */
-    aspect-ratio: 4 / 3; /* Rasio 4:3 umum */
-    background-color: #eee;
-    border: 1px solid #ccc;
-    margin: 0 auto 1rem auto; /* Tengahkan dan beri margin bawah */
-    overflow: hidden; /* Sembunyikan bagian video yang meluap */
-    border-radius: 4px;
+  position: relative;
+  width: 100%;
+  max-width: 400px; /* Batasi lebar area kamera/preview */
+  aspect-ratio: 4 / 3; /* Rasio 4:3 umum */
+  background-color: #eee;
+  border: 1px solid #ccc;
+  margin: 0 auto 1rem auto; /* Tengahkan dan beri margin bawah */
+  overflow: hidden; /* Sembunyikan bagian video yang meluap */
+  border-radius: 4px;
 }
-.camera-section video, .camera-section img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Cover area, mungkin terpotong */
+.camera-section video,
+.camera-section img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Cover area, mungkin terpotong */
 }
 .camera-controls {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
 }
 .form-group-checkbox {
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
 }
 .form-group-checkbox input[type="checkbox"] {
-    width: auto; /* Ukuran checkbox default */
+  width: auto; /* Ukuran checkbox default */
 }
 .map-picker {
-    height: 300px; /* Tinggi peta untuk memilih lokasi */
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-top: 0.5rem;
+  height: 300px; /* Tinggi peta untuk memilih lokasi */
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 0.5rem;
 }
 .info-text {
-    font-size: 0.9em;
-    color: #6c757d;
-    text-align: center;
-    margin-top: 0.5rem;
+  font-size: 0.9em;
+  color: #6c757d;
+  text-align: center;
+  margin-top: 0.5rem;
 }
-.map-info { /* Styling untuk info di peta Leaflet */
-    padding: 6px 8px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
-    background: white;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
+.map-info {
+  /* Styling untuk info di peta Leaflet */
+  padding: 6px 8px;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
 }
-
 
 /* Home Page: Story List */
 .stories-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Grid responsif */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(280px, 1fr)
+  ); /* Grid responsif */
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
@@ -342,8 +357,8 @@ main {
 }
 
 .story-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .story-item__image {
@@ -365,7 +380,8 @@ main {
   color: #333;
 }
 
-.story-item__date, .story-item__location {
+.story-item__date,
+.story-item__location {
   font-size: 0.85em;
   color: #6c757d; /* Abu-abu */
   margin-bottom: 0.5rem;
@@ -375,68 +391,68 @@ main {
 }
 .story-item__description {
   margin-bottom: 0.8rem;
-   flex-grow: 1; /* Deskripsi mengisi ruang tersisa */
-   overflow: hidden; /* Sembunyikan teks berlebih */
-   display: -webkit-box; /* Untuk text ellipsis multi-baris (opsional) */
-   -webkit-line-clamp: 3; /* Batasi 3 baris */
-   -webkit-box-orient: vertical;
+  flex-grow: 1; /* Deskripsi mengisi ruang tersisa */
+  overflow: hidden; /* Sembunyikan teks berlebih */
+  display: -webkit-box; /* Untuk text ellipsis multi-baris (opsional) */
+  -webkit-line-clamp: 3; /* Batasi 3 baris */
+  -webkit-box-orient: vertical;
 }
 
 /* Home Page: Map Display */
 .map-display {
-    height: 400px; /* Tinggi peta di halaman home */
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-top: 1rem;
+  height: 400px; /* Tinggi peta di halaman home */
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 1rem;
 }
 
 /* Leaflet Popup Styling */
 .leaflet-popup-content-wrapper {
-    border-radius: 6px;
+  border-radius: 6px;
 }
 .leaflet-popup-content {
-    font-size: 0.95rem;
-    line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 .leaflet-popup-content b {
-    color: #0056b3;
+  color: #0056b3;
 }
 .leaflet-popup-content img {
-    margin-top: 8px;
-    border-radius: 4px;
+  margin-top: 8px;
+  border-radius: 4px;
 }
 /* Styling untuk Leaflet Layer Control */
 .leaflet-control-layers-toggle {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEASURBVEhLY2RAA4pf/v9/w9T/mfH//z/DGEAATZgA9f8/GH3/Y/j/759hnIEAYrqA4f9/MPz/D8PM/zAKYAAmCDD8/w/D/38/GD4fYdBgBDQAJwgw/P8Pw///Mfj/HwYYwwAagBEEDYALkPD/Pwx//xn+//9n+P8fYQCQAhgGLgET/v8Hw/9/GP7/+/8ZwRYACbAGHrAGHvj/HwYsgAlA+gA8QMX/fwzG/xl+//9n+P//j+H///8MwwAGcQwAbADMP/8z/P+fgYGAgYGBgAGQEP8ZgAAAEwEMMAAEU4Dmn38Znv/PjAAj4///M/x/A0ECAgAARkB8A7p8h9kAAAAASUVORK5CYII='); /* Simple layers icon */
-    width: 30px !important;
-    height: 30px !important;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEASURBVEhLY2RAA4pf/v9/w9T/mfH//z/DGEAATZgA9f8/GH3/Y/j/759hnIEAYrqA4f9/MPz/D8PM/zAKYAAmCDD8/w/D/38/GD4fYdBgBDQAJwgw/P8Pw///Mfj/HwYYwwAagBEEDYALkPD/Pwx//xn+//9n+P8fYQCQAhgGLgET/v8Hw/9/GP7/+/8ZwRYACbAGHrAGHvj/HwYsgAlA+gA8QMX/fwzG/xl+//9n+P//j+H///8MwwAGcQwAbADMP/8z/P+fgYGAgYGBgAGQEP8ZgAAAEwEMMAAEU4Dmn38Znv/PjAAj4///M/x/A0ECAgAARkB8A7p8h9kAAAAASUVORK5CYII="); /* Simple layers icon */
+  width: 30px !important;
+  height: 30px !important;
 }
 .leaflet-control-layers {
-    border-radius: 5px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
 }
 .leaflet-control-layers-base label {
-    font-weight: normal;
-    font-size: 0.95em;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+  font-weight: normal;
+  font-size: 0.95em;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-
 
 /* Mobile Menu Button */
 .header__menu {
-    display: none; /* Sembunyikan di layar besar */
-    font-size: 2rem;
-    background: none;
-    border: none;
-    color: #333;
-    padding: 0.2rem 0.5rem;
+  display: none; /* Sembunyikan di layar besar */
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: #333;
+  padding: 0.2rem 0.5rem;
 }
 
 /* Utility Classes */
-.sr-only { /* Screen reader only */
+.sr-only {
+  /* Screen reader only */
   position: absolute;
   width: 1px;
   height: 1px;
@@ -447,91 +463,93 @@ main {
   white-space: nowrap;
   border: 0;
 }
-.button { /* Generic button styles */
-    padding: 0.6em 1.2em;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
-    transition: background-color 0.2s ease;
+.button {
+  /* Generic button styles */
+  padding: 0.6em 1.2em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  transition: background-color 0.2s ease;
 }
 .button:hover {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
-.button i { /* Icon spacing */
-    margin-right: 0.5em;
+.button i {
+  /* Icon spacing */
+  margin-right: 0.5em;
 }
 .button-primary {
-    background-color: #007bff;
-    color: white;
-    border-color: #007bff;
+  background-color: #007bff;
+  color: white;
+  border-color: #007bff;
 }
 .button-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+  background-color: #0056b3;
+  border-color: #0056b3;
 }
 .button-success {
-    background-color: #28a745;
-    color: white;
-    border-color: #28a745;
+  background-color: #28a745;
+  color: white;
+  border-color: #28a745;
 }
 .button-success:hover {
-    background-color: #218838;
-    border-color: #1e7e34;
+  background-color: #218838;
+  border-color: #1e7e34;
 }
-
 
 /* Responsiveness */
 @media (max-width: 768px) {
   .app-header__content {
-      position: relative; /* For absolute positioning of nav */
+    position: relative; /* For absolute positioning of nav */
   }
   .header__menu {
-      display: block; /* Tampilkan tombol menu */
+    display: block; /* Tampilkan tombol menu */
   }
   .app-navigation {
-      position: absolute;
-      top: 100%; /* Tepat di bawah header */
-      left: 0;
-      width: 100%;
-      background-color: #ffffff;
-      box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
-      max-height: 0; /* Sembunyikan awalnya */
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-      border-top: 1px solid #eee;
+    position: absolute;
+    top: 100%; /* Tepat di bawah header */
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+    max-height: 0; /* Sembunyikan awalnya */
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    border-top: 1px solid #eee;
   }
-   .app-navigation.open {
-      max-height: 300px; /* Tinggi maksimum saat terbuka */
-   }
+  .app-navigation.open {
+    max-height: 300px; /* Tinggi maksimum saat terbuka */
+  }
 
   .app-navigation ul {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
   }
   .app-navigation li {
-      margin-left: 0;
-      width: 100%;
-      border-bottom: 1px solid #eee;
+    margin-left: 0;
+    width: 100%;
+    border-bottom: 1px solid #eee;
   }
-   .app-navigation li:last-child {
-        border-bottom: none;
-   }
-  .app-navigation a, .logout-button {
-      display: block;
-      padding: 0.8rem 0;
-      width: 100%;
+  .app-navigation li:last-child {
+    border-bottom: none;
   }
-   .app-navigation a::after {
-       display: none; /* Hapus underline effect di mobile nav */
-   }
+  .app-navigation a,
+  .logout-button {
+    display: block;
+    padding: 0.8rem 0;
+    width: 100%;
+  }
+  .app-navigation a::after {
+    display: none; /* Hapus underline effect di mobile nav */
+  }
 
   .stories-list {
-      grid-template-columns: 1fr; /* Satu kolom di mobile */
+    grid-template-columns: 1fr; /* Satu kolom di mobile */
   }
   .container {
-      margin: 1rem auto;
-      padding: 1rem;
+    margin: 1rem auto;
+    padding: 1rem;
   }
 }
 
@@ -544,11 +562,15 @@ main {
 */
 
 @keyframes fade-in {
-  from { opacity: 0; }
+  from {
+    opacity: 0;
+  }
 }
 
 @keyframes fade-out {
-  to { opacity: 0; }
+  to {
+    opacity: 0;
+  }
 }
 
 ::view-transition-old(root) {
@@ -557,4 +579,118 @@ main {
 
 ::view-transition-new(root) {
   animation: 300ms ease-in both fade-in;
+}
+
+.story-item-link {
+  display: block; /* Agar link mengisi seluruh area grid */
+  text-decoration: none;
+  color: inherit; /* Warisi warna teks dari body/parent */
+  border-radius: 8px; /* Samakan dengan border-radius item */
+  transition: box-shadow 0.2s ease; /* Transisi shadow saat hover/focus */
+}
+.story-item-link:hover,
+.story-item-link:focus {
+  outline: none; /* Hapus outline default */
+}
+.story-item-link:hover .story-item,
+.story-item-link:focus .story-item {
+  /* Efek visual saat hover/focus pada link */
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+.story-item {
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Pindahkan transisi ke item */
+}
+/* Hapus transisi hover dari item itu sendiri jika sudah ada */
+/* .story-item:hover { ... } */
+
+/* Styling Halaman Detail */
+.detail-container {
+  padding-top: 1rem;
+}
+.back-link {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+.back-link i {
+  margin-right: 0.5em;
+}
+.back-link:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+.story-detail {
+  background-color: #fff; /* Mungkin tidak perlu jika container sudah putih */
+}
+.story-detail h2 {
+  margin-bottom: 1rem;
+  color: #333;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+.story-detail__image {
+  width: 100%;
+  max-height: 500px; /* Batasi tinggi gambar */
+  object-fit: contain; /* Tampilkan seluruh gambar, mungkin ada ruang kosong */
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  background-color: #f8f9fa; /* Latar belakang jika gambar transparan */
+}
+.story-detail__content {
+  line-height: 1.7;
+}
+.story-detail__description {
+  font-size: 1.1em;
+  margin-bottom: 1rem;
+  white-space: pre-wrap; /* Jaga format spasi dan baris baru */
+}
+.story-detail__date {
+  font-size: 0.9em;
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+#detailStoryMapContainer {
+  margin-top: 1.5rem;
+}
+#detailStoryMapContainer h3 {
+  margin-bottom: 1rem;
+  font-size: 1.3em;
+  color: #444;
+}
+#detailStoryMap {
+  height: 350px; /* Sesuaikan tinggi peta detail */
+}
+.coordinates-info {
+  font-size: 0.9em;
+  color: #6c757d;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+.no-location-info {
+  font-style: italic;
+  color: #6c757d;
+  padding: 1rem 0;
+}
+
+.camera-error {
+  margin-top: 0.5rem; /* Beri jarak dari area kamera */
+  margin-bottom: 1rem; /* Beri jarak ke tombol */
+  text-align: center;
+}
+
+.map-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999; /* Lebih tinggi dari Leaflet map */
+  background: transparent;
+  pointer-events: all; /* Ini yang bikin interaksi ke map diblok */
 }

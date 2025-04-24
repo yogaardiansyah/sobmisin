@@ -10,21 +10,26 @@ const MapUtils = {
     _defaultCenter: CONFIG.DEFAULT_MAP_CENTER,
     _defaultZoom: CONFIG.DEFAULT_MAP_ZOOM,
 
-    // Layer 1: OpenStreetMap (Default)
     _osmLayerUrl: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     _osmLayerAttribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 
-    // Layer 2: MapTiler Streets v2 (optional)
     _mapTilerStreetsV2Url: `https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=${CONFIG.MAPTILER_API_KEY}`,
     _mapTilerAttribution: '© <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
 
     initMap(containerId, options = {}) {
         if (typeof L === 'undefined') throw new Error("Leaflet not loaded");
+
         const mapContainer = document.getElementById(containerId);
         if (!mapContainer) {
             throw new Error(`Map container with id "${containerId}" not found.`);
         }
-        mapContainer.innerHTML = ''; // Bersihkan container
+
+        // 🛠 SPA FIX: Hapus instance lama jika ada
+        if (mapContainer._leaflet_id !== undefined) {
+            console.warn(`Cleaning up Leaflet map in container #${containerId}`);
+            mapContainer._leaflet_id = null;
+            mapContainer.innerHTML = ''; // Clear container
+        }
 
         const mapOptions = {
             ...options,
@@ -35,6 +40,7 @@ const MapUtils = {
         if (!Array.isArray(mapOptions.center) || mapOptions.center.length !== 2) {
             throw new Error("Invalid map center provided.");
         }
+
         if (typeof mapOptions.zoom !== 'number') {
             throw new Error("Invalid map zoom level.");
         }
@@ -59,7 +65,7 @@ const MapUtils = {
             baseLayers["MapTiler Streets"] = mapTilerLayer;
             console.log("MapTiler layer added to options.");
         } else {
-            console.warn("MapTiler API Key not found or is placeholder in config.js. MapTiler layer disabled.");
+            console.warn("MapTiler API Key not found or is placeholder. Skipping MapTiler layer.");
         }
 
         osmLayer.addTo(map);
@@ -71,6 +77,7 @@ const MapUtils = {
 
         console.log(`Map initialized in #${containerId}`);
         setTimeout(() => map.invalidateSize(), 100);
+
         return map;
     },
 
@@ -79,6 +86,7 @@ const MapUtils = {
             console.error("Map instance is required to add markers.");
             return;
         }
+
         if (typeof L === 'undefined') throw new Error("Leaflet not loaded");
 
         console.log(`Adding ${stories.length} markers to the map.`);

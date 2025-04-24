@@ -8,17 +8,26 @@ import LoginPage from '../view/pages/login-page.js';
 import RegisterPage from '../view/pages/register-page.js';
 import HomePage from '../view/pages/home-page.js';
 import AddStoryPage from '../view/pages/add-story-page.js';
+import DetailPage from '../view/pages/detail-page.js'; // <-- IMPORT BARU
+
+// Import Sweet Alert
+import Swal from 'sweetalert2'; // <-- IMPORT BARU
 
 class MainPresenter {
     constructor(mainView) {
         this._mainView = mainView;
-        this._authPresenter = new AuthPresenter({ view: this._mainView }); // MainView can handle errors/loading globally
+        this._authPresenter = new AuthPresenter({ view: this._mainView });
         this._storyPresenter = new StoryPresenter({
             mainView: this._mainView,
-            homePageView: HomePage, // Pass the rendering functions/modules
+            homePageView: HomePage,
             addStoryPageView: AddStoryPage,
+            detailPageView: DetailPage, // <-- PASS DETAIL PAGE VIEW
         });
 
+        this._setupNavigationAndLogout(); // Gabungkan setup
+    }
+
+    _setupNavigationAndLogout() {
         // Initial setup for navigation and logout button visibility
         this._updateNavigation();
         document.addEventListener('auth-change', () => this._updateNavigation());
@@ -27,7 +36,28 @@ class MainPresenter {
         const logoutButton = document.getElementById('logoutButton');
         if(logoutButton) {
              logoutButton.addEventListener('click', () => {
-                 this._authPresenter.handleLogout();
+                 // Konfirmasi logout dengan SweetAlert
+                 Swal.fire({
+                     title: 'Are you sure?',
+                     text: "You will be logged out!",
+                     icon: 'warning',
+                     showCancelButton: true,
+                     confirmButtonColor: '#3085d6',
+                     cancelButtonColor: '#d33',
+                     confirmButtonText: 'Yes, log out!'
+                 }).then((result) => {
+                     if (result.isConfirmed) {
+                         this._authPresenter.handleLogout();
+                         // Tampilkan notifikasi sukses logout
+                         Swal.fire({
+                            title: 'Logged Out!',
+                            text: 'You have been successfully logged out.',
+                            icon: 'success',
+                            timer: 1500, // Tutup otomatis setelah 1.5 detik
+                            showConfirmButton: false
+                         });
+                     }
+                 });
              });
         } else {
             console.error('Logout button not found');
@@ -41,52 +71,46 @@ class MainPresenter {
                  event.stopPropagation();
                  nav.classList.toggle('open');
              });
-             // Close menu if clicking outside
              document.body.addEventListener('click', () => {
                  nav.classList.remove('open');
              });
              nav.addEventListener('click', (event) => {
-                 event.stopPropagation(); // Prevent body click from closing when clicking inside nav
+                 event.stopPropagation();
              });
          }
     }
 
+
     _updateNavigation() {
         const isLoggedIn = AuthModel.isLoggedIn();
         const logoutButton = document.getElementById('logoutButton');
-        const navLinks = document.querySelectorAll('#navigationDrawer ul li a'); // Adjust selector if needed
+        const navLinks = document.querySelectorAll('#navigationDrawer ul li a');
 
         if (logoutButton) {
             logoutButton.style.display = isLoggedIn ? 'block' : 'none';
         }
 
-        // Hide/show nav links based on login status
         navLinks.forEach(link => {
              const href = link.getAttribute('href');
              if (href === '#/login' || href === '#/register') {
                  link.parentElement.style.display = isLoggedIn ? 'none' : 'list-item';
-             } else {
-                 // Optionally hide protected links if not logged in,
-                 // but routing handles redirection anyway.
-                 // link.parentElement.style.display = isLoggedIn ? 'list-item' : 'none';
              }
+             // Sembunyikan add story jika guest tidak diizinkan (opsional, tergantung logika bisnis)
+             // if (href === '#/add-story' && !AuthModel.isLoggedIn() && !ALLOW_GUEST_POSTING) {
+             //     link.parentElement.style.display = 'none';
+             // }
         });
 
-        // Close mobile menu after navigation (if open)
         const nav = document.getElementById('navigationDrawer');
         if (nav) {
             nav.classList.remove('open');
         }
     }
 
-    // --- Page Loading Methods ---
-
      _cleanupCurrentPage() {
-         // Ask the StoryPresenter to clean up its resources before loading a new page
          if (this._storyPresenter && typeof this._storyPresenter.cleanupPageResources === 'function') {
              this._storyPresenter.cleanupPageResources();
          }
-         // Add cleanup for other presenters if they manage resources like maps/camera
      }
 
 
@@ -94,7 +118,7 @@ class MainPresenter {
          this._cleanupCurrentPage();
          this._mainView.renderPage(
              () => LoginPage.render(),
-             () => LoginPage.setupEventListeners(this._authPresenter) // Pass presenter to setup listeners
+             () => LoginPage.setupEventListeners(this._authPresenter)
          );
     }
 
@@ -108,15 +132,27 @@ class MainPresenter {
 
     showHomePage() {
          this._cleanupCurrentPage();
-         // Let StoryPresenter handle fetching and rendering
          this._storyPresenter.displayHomePage();
     }
 
     showAddStoryPage() {
          this._cleanupCurrentPage();
-         // Let StoryPresenter handle rendering and setup
          this._storyPresenter.displayAddStoryPage();
     }
+
+    // --- METODE BARU UNTUK DETAIL ---
+    showDetailPage(storyId) {
+        if (!storyId) {
+             console.error("Story ID is required for detail page.");
+             this.showNotFoundPage(); // Tampilkan 404 jika ID tidak ada
+             return;
+        }
+         this._cleanupCurrentPage();
+         // Minta StoryPresenter untuk menampilkan halaman detail
+         this._storyPresenter.displayDetailPage(storyId);
+     }
+    // --- AKHIR METODE BARU ---
+
 
      showNotFoundPage() {
          this._cleanupCurrentPage();

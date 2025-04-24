@@ -1,25 +1,29 @@
 // src/js/view/pages/register-page.js
+import Swal from 'sweetalert2'; // Import Swal
+
 const RegisterPage = {
     render() {
         return `
             <div class="container register-container">
                 <h2>Register</h2>
-                 <div id="errorMessage" class="error-message" style="display: none;"></div>
-                 <div id="loadingIndicator" class="loading-indicator" style="display: none;">Registering...</div>
+                 <div id="registerErrorMessage" class="error-message" style="display: none;"></div>
                 <form id="registerForm" class="auth-form" novalidate>
                     <div class="form-group">
                         <label for="name">Name:</label>
-                        <input type="text" id="name" name="name" required aria-required="true">
+                        <input type="text" id="name" name="name" required aria-required="true" autocomplete="name">
                     </div>
                     <div class="form-group">
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" required aria-required="true">
+                        <input type="email" id="email" name="email" required aria-required="true" autocomplete="email">
                     </div>
                     <div class="form-group">
                         <label for="password">Password (min. 8 characters):</label>
-                        <input type="password" id="password" name="password" required aria-required="true" minlength="8">
+                        <input type="password" id="password" name="password" required aria-required="true" minlength="8" autocomplete="new-password">
                     </div>
-                    <button type="submit">Register</button>
+                    <button type="submit" id="registerSubmitButton">
+                       <span class="button-text">Register</span>
+                       <span class="button-loading" style="display: none;"><i class="fas fa-spinner fa-spin"></i> Registering...</span>
+                    </button>
                 </form>
                 <p>Already have an account? <a href="#/login">Login here</a></p>
             </div>
@@ -31,38 +35,50 @@ const RegisterPage = {
         const nameInput = document.getElementById('name');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
-        const errorMessageDiv = document.getElementById('errorMessage');
-        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMessageDiv = document.getElementById('registerErrorMessage'); // ID spesifik
+        const submitButton = document.getElementById('registerSubmitButton');
+        const buttonText = submitButton.querySelector('.button-text');
+        const buttonLoading = submitButton.querySelector('.button-loading');
+
 
         if (form && authPresenter) {
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
+                errorMessageDiv.style.display = 'none'; // Sembunyikan error lama
                 const name = nameInput.value;
                 const email = emailInput.value;
                 const password = passwordInput.value;
-                // Pass control to the presenter
                  authPresenter.handleRegister(name, email, password);
             });
         }
 
-         // Add view utils similar to LoginPage
           RegisterPage.viewUtils = {
-             showLoading: () => { if (loadingIndicator) loadingIndicator.style.display = 'block'; },
-             hideLoading: () => { if (loadingIndicator) loadingIndicator.style.display = 'none'; },
+             // --- Perubahan showLoading ---
+             showLoading: () => {
+                  if (submitButton) submitButton.disabled = true;
+                  if (buttonText) buttonText.style.display = 'none';
+                  if (buttonLoading) buttonLoading.style.display = 'inline-flex';
+             },
+             hideLoading: () => {
+                  if (submitButton) submitButton.disabled = false;
+                  if (buttonText) buttonText.style.display = 'inline';
+                  if (buttonLoading) buttonLoading.style.display = 'none';
+             },
+             // --- Perubahan showError ---
              showError: (message) => {
-                 if (errorMessageDiv) {
-                     errorMessageDiv.textContent = message;
-                     errorMessageDiv.style.display = 'block';
-                 }
+                  if (errorMessageDiv) {
+                      errorMessageDiv.textContent = message;
+                      errorMessageDiv.style.display = 'block';
+                  }
+                  // Atau: Swal.fire('Registration Failed', message, 'error');
              },
              clearError: () => {
-                 if (errorMessageDiv) {
-                     errorMessageDiv.textContent = '';
-                     errorMessageDiv.style.display = 'none';
-                 }
+                  if (errorMessageDiv) {
+                      errorMessageDiv.textContent = '';
+                      errorMessageDiv.style.display = 'none';
+                  }
              }
          };
-         // Give presenter access to these view utils
          authPresenter._view = RegisterPage.viewUtils;
     }
 };

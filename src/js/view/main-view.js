@@ -1,6 +1,6 @@
 // src/js/view/main-view.js
 import { runViewTransition } from '../utils/view-transition.js';
-import createLoadingIndicator from './components/loading-indicator.js'; // Optional advanced loader
+import Swal from 'sweetalert2'; // Import Swal untuk showError
 
 class MainView {
     constructor(mainElement) {
@@ -10,16 +10,12 @@ class MainView {
         this._mainElement = mainElement;
     }
 
-    // Fungsi untuk merender konten ke main element dengan transisi
     renderPage(pageRenderer, presenterCallback = null) {
         runViewTransition(() => {
-            // Hapus event listeners dari konten lama jika perlu (Mencegah memory leak)
-            // Ini lebih kompleks; pendekatan mudah adalah mengandalkan garbage collection
-            // atau framework jika digunakan.
-            this._mainElement.innerHTML = ''; // Kosongkan dulu
+            this._mainElement.innerHTML = '';
 
             try {
-                 const pageContent = pageRenderer(); // Panggil fungsi render page (misal, LoginPage.render())
+                 const pageContent = pageRenderer();
 
                  if (pageContent instanceof HTMLElement) {
                      this._mainElement.appendChild(pageContent);
@@ -27,54 +23,64 @@ class MainView {
                      this._mainElement.innerHTML = pageContent;
                  } else {
                      console.error('Page renderer did not return valid content (HTML string or Element)');
-                     this.showError('Failed to load page content.');
-                     return; // Hentikan eksekusi jika konten tidak valid
+                     this.showError('Failed to load page content.'); // Gunakan showError
+                     return;
                  }
 
-                 // Panggil callback presenter SETELAH DOM diupdate
                  if (presenterCallback && typeof presenterCallback === 'function') {
-                    // Beri sedikit waktu agar DOM benar-benar siap (terutama untuk map init)
                      setTimeout(() => {
                          try {
                             presenterCallback();
                          } catch(callbackError) {
                              console.error("Error in presenter callback after render:", callbackError);
-                             this.showError(`Error setting up page features: ${callbackError.message}`);
+                             this.showError(`Error setting up page features: ${callbackError.message}`); // Gunakan showError
                          }
-                     }, 0); // Timeout 0 untuk eksekusi setelah render cycle saat ini
+                     }, 50); // Beri sedikit delay extra
                  }
             } catch (renderError) {
                  console.error("Error rendering page:", renderError);
-                 this.showError(`Failed to render page: ${renderError.message}`);
+                 this.showError(`Failed to render page: ${renderError.message}`); // Gunakan showError
             }
-
-
         });
     }
 
+    // --- Perubahan showLoading ---
     showLoading() {
-        // Gunakan transisi view saat menampilkan loading juga
          runViewTransition(() => {
-             this._mainElement.innerHTML = ''; // Clear previous content
-             // this._mainElement.appendChild(createLoadingIndicator()); // Jika pakai komponen
-             this._mainElement.innerHTML = '<div class="loading-indicator global-loading">Loading...</div>'; // Simple version
+             this._mainElement.innerHTML = `
+                <div class="loading-indicator global-loading">
+                    <div class="spinner"></div>
+                    <span>Loading Content...</span>
+                </div>`;
          });
     }
+    // --- Akhir Perubahan showLoading ---
 
-    showError(message) {
-         // Error bisa ditampilkan di dalam main content atau di area notifikasi khusus
-         // Untuk simplicity, kita tampilkan di main content
-          runViewTransition(() => {
-              this._mainElement.innerHTML = `<div class="container error-container"><h2>Error</h2><p class="error-message">${message}</p><a href="#/home">Go Home</a></div>`;
-          });
+    // --- Perubahan showError (gunakan SweetAlert) ---
+    showError(message = 'An unexpected error occurred.') {
+        // Error global bisa ditampilkan di main content, atau lebih baik via Modal
+         Swal.fire({
+             icon: 'error',
+             title: 'Oops... Something went wrong!',
+             text: message,
+             confirmButtonText: 'Go Home', // Tombol untuk navigasi
+             footer: '<a href="#/home">Or click here to go home</a>' // Link tambahan
+         }).then((result) => {
+             // Jika tombol "Go Home" diklik
+             if (result.isConfirmed) {
+                  window.location.hash = '#/home';
+             }
+         });
+         // Kita juga bisa mengosongkan main content jika diinginkan
+         // runViewTransition(() => {
+         //     this._mainElement.innerHTML = `<div class="container error-container"><p>Redirecting or check the error message...</p></div>`;
+         // });
     }
+    // --- Akhir Perubahan showError ---
 
-     // Helper untuk membersihkan error (jika error ditampilkan di area spesifik)
      clearError() {
-         const errorContainer = this._mainElement.querySelector('.error-container');
-         if (errorContainer) {
-            errorContainer.remove();
-         }
+        // Jika menggunakan Swal, tidak perlu clear manual dari DOM
+        // Swal.close(); // Bisa dipanggil jika perlu menutup paksa
      }
 }
 
