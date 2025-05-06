@@ -1,5 +1,4 @@
-// src/js/view/pages/login-page.js
-import Swal from 'sweetalert2'; // Import Swal
+import Swal from 'sweetalert2';
 
 const LoginPage = {
     render() {
@@ -30,7 +29,7 @@ const LoginPage = {
         const form = document.getElementById('loginForm');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
-        const errorMessageDiv = document.getElementById('loginErrorMessage'); // ID spesifik
+        const errorMessageDiv = document.getElementById('loginErrorMessage');
         const submitButton = document.getElementById('loginSubmitButton');
         const buttonText = submitButton.querySelector('.button-text');
         const buttonLoading = submitButton.querySelector('.button-loading');
@@ -38,7 +37,7 @@ const LoginPage = {
         if (form && authPresenter) {
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
-                errorMessageDiv.style.display = 'none'; // Sembunyikan error lama
+                errorMessageDiv.style.display = 'none';
                 const email = emailInput.value;
                 const password = passwordInput.value;
                 authPresenter.handleLogin(email, password);
@@ -46,26 +45,21 @@ const LoginPage = {
         }
 
          LoginPage.viewUtils = {
-             // --- Perubahan showLoading ---
              showLoading: () => {
                  if (submitButton) submitButton.disabled = true;
                  if (buttonText) buttonText.style.display = 'none';
-                 if (buttonLoading) buttonLoading.style.display = 'inline-flex'; // Gunakan inline-flex agar ikon dan teks sejajar
+                 if (buttonLoading) buttonLoading.style.display = 'inline-flex';
              },
              hideLoading: () => {
                   if (submitButton) submitButton.disabled = false;
                   if (buttonText) buttonText.style.display = 'inline';
                   if (buttonLoading) buttonLoading.style.display = 'none';
              },
-             // --- Perubahan showError (bisa pakai div atau Swal) ---
              showError: (message) => {
-                 // Pilihan 1: Tampilkan di div error spesifik
                  if (errorMessageDiv) {
                      errorMessageDiv.textContent = message;
                      errorMessageDiv.style.display = 'block';
                  }
-                 // Pilihan 2: Gunakan SweetAlert (lebih konsisten)
-                 // Swal.fire('Login Failed', message, 'error');
              },
              clearError: () => {
                  if (errorMessageDiv) {

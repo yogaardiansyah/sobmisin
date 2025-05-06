@@ -1,4 +1,3 @@
-// src/js/utils/auth.js
 const Auth = {
     STORAGE_KEY: 'storyAppAuthToken',
 

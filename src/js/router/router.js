@@ -1,4 +1,3 @@
-// src/js/router/router.js
 import MainPresenter from '../presenter/main-presenter.js';
 import MainView from '../view/main-view.js';
 import AuthModel from '../model/auth-model.js';
@@ -17,7 +16,7 @@ const routes = {
   '/': () => mainPresenter.showHomePage(),
   '/home': () => mainPresenter.showHomePage(),
   '/add-story': () => mainPresenter.showAddStoryPage(),
-  '/detail': (id) => mainPresenter.showDetailPage(id), // <-- RUTE BARU (param akan ditangani)
+  '/detail': (id) => mainPresenter.showDetailPage(id),
 };
 
 const publicRoutes = ['/login', '/register'];
@@ -25,30 +24,24 @@ const guestAccessibleRoutes = ['/add-story'];
 
 const handleRouteChange = () => {
   const hash = window.location.hash.substring(1) || '/';
-  // Pisahkan path utama dan parameter potensial
   const pathParts = hash.split('/');
-  const baseSegment = pathParts[1] || ''; // e.g., 'home', 'detail', 'login'
-  const param = pathParts[2] || null; // e.g., 'story-id' for detail
+  const baseSegment = pathParts[1] || '';
+  const param = pathParts[2] || null;
 
-  const baseRoute = `/${baseSegment}`; // Route key: /home, /detail, /login
+  const baseRoute = `/${baseSegment}`;
 
   console.log(`Routing attempt: hash='${hash}', baseRoute='${baseRoute}', param='${param}'`);
 
-  // Cari handler berdasarkan baseRoute
   const handler = routes[baseRoute] || null;
 
   const isLoggedIn = AuthModel.isLoggedIn();
 
-  // Redirect logged-in users away from login/register
   if (isLoggedIn && publicRoutes.includes(baseRoute)) {
     console.log('Already logged in, redirecting to home');
     window.location.hash = '/home';
     return;
   }
 
-  // Redirect non-logged-in users trying to access protected routes,
-  // KECUALI rute tersebut ada di guestAccessibleRoutes
-  // Juga, rute detail memerlukan login
   const requiresLogin = !publicRoutes.includes(baseRoute) && !guestAccessibleRoutes.includes(baseRoute) && baseRoute !== '/';
   if (!isLoggedIn && requiresLogin) {
      console.log('Not logged in and accessing protected route, redirecting to login for route:', baseRoute);
@@ -58,11 +51,9 @@ const handleRouteChange = () => {
 
   if (handler) {
      console.log(`Executing handler for: ${baseRoute}`);
-     // Panggil handler dengan parameter jika ada
      if (param && typeof handler === 'function') {
          handler(param);
      } else if (typeof handler === 'function') {
-         // Panggil tanpa param jika tidak ada atau handler tidak menerimanya
          handler();
      }
   } else {

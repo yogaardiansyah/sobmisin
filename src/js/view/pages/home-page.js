@@ -1,5 +1,5 @@
 import createStoryItemTemplate from '../templates/story-item-template.js';
-import AuthModel from '../../model/auth-model.js'; // To greet the user
+import AuthModel from '../../model/auth-model.js';
 
 const HomePage = {
     render(stories = []) {

@@ -1,17 +1,14 @@
-// src/js/presenter/main-presenter.js
 import AuthModel from '../model/auth-model.js';
 import AuthPresenter from './auth-presenter.js';
 import StoryPresenter from './story-presenter.js';
 
-// Import page view generators
 import LoginPage from '../view/pages/login-page.js';
 import RegisterPage from '../view/pages/register-page.js';
 import HomePage from '../view/pages/home-page.js';
 import AddStoryPage from '../view/pages/add-story-page.js';
-import DetailPage from '../view/pages/detail-page.js'; // <-- IMPORT BARU
+import DetailPage from '../view/pages/detail-page.js';
 
-// Import Sweet Alert
-import Swal from 'sweetalert2'; // <-- IMPORT BARU
+import Swal from 'sweetalert2';
 
 class MainPresenter {
     constructor(mainView) {
@@ -21,22 +18,19 @@ class MainPresenter {
             mainView: this._mainView,
             homePageView: HomePage,
             addStoryPageView: AddStoryPage,
-            detailPageView: DetailPage, // <-- PASS DETAIL PAGE VIEW
+            detailPageView: DetailPage,
         });
 
-        this._setupNavigationAndLogout(); // Gabungkan setup
+        this._setupNavigationAndLogout();
     }
 
     _setupNavigationAndLogout() {
-        // Initial setup for navigation and logout button visibility
         this._updateNavigation();
         document.addEventListener('auth-change', () => this._updateNavigation());
 
-        // Handle logout button click
         const logoutButton = document.getElementById('logoutButton');
         if(logoutButton) {
              logoutButton.addEventListener('click', () => {
-                 // Konfirmasi logout dengan SweetAlert
                  Swal.fire({
                      title: 'Are you sure?',
                      text: "You will be logged out!",
@@ -48,15 +42,13 @@ class MainPresenter {
                  }).then((result) => {
                      if (result.isConfirmed) {
                          this._authPresenter.handleLogout();
-                         // Tampilkan notifikasi sukses logout
                          Swal.fire({
                             title: 'Logged Out!',
                             text: 'You have been successfully logged out.',
                             icon: 'success',
-                            timer: 1500, // Tutup otomatis setelah 1.5 detik
+                            timer: 1500,
                             showConfirmButton: false
                          }).then(() => {
-                             // Arahkan ke halaman login setelah logout
                              window.location.hash = '#/login';
                          });
                      }
@@ -66,7 +58,6 @@ class MainPresenter {
             console.error('Logout button not found');
         }
 
-         // Menu toggle for mobile
          const menuButton = document.getElementById('menuButton');
          const nav = document.getElementById('navigationDrawer');
          if (menuButton && nav) {
@@ -97,10 +88,6 @@ class MainPresenter {
              if (href === '#/login' || href === '#/register') {
                  link.parentElement.style.display = isLoggedIn ? 'none' : 'list-item';
              }
-             // Sembunyikan add story jika guest tidak diizinkan (opsional, tergantung logika bisnis)
-             // if (href === '#/add-story' && !AuthModel.isLoggedIn() && !ALLOW_GUEST_POSTING) {
-             //     link.parentElement.style.display = 'none';
-             // }
         });
 
         const nav = document.getElementById('navigationDrawer');
@@ -142,18 +129,15 @@ class MainPresenter {
          this._storyPresenter.displayAddStoryPage();
     }
 
-    // --- METODE BARU UNTUK DETAIL ---
     showDetailPage(storyId) {
         if (!storyId) {
              console.error("Story ID is required for detail page.");
-             this.showNotFoundPage(); // Tampilkan 404 jika ID tidak ada
+             this.showNotFoundPage();
              return;
         }
          this._cleanupCurrentPage();
-         // Minta StoryPresenter untuk menampilkan halaman detail
          this._storyPresenter.displayDetailPage(storyId);
      }
-    // --- AKHIR METODE BARU ---
 
 
      showNotFoundPage() {

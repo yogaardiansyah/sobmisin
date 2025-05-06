@@ -1,4 +1,3 @@
-/* Reset & Basic Styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -12,7 +11,7 @@ html {
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
-  background-color: #f4f7f9; /* Warna latar belakang lembut */
+  background-color: #f4f7f9;
   color: #333;
   display: flex;
   flex-direction: column;
@@ -20,7 +19,7 @@ body {
 }
 
 a {
-  color: #007bff; /* Warna link biru standar */
+  color: #007bff;
   text-decoration: none;
 }
 
@@ -48,7 +47,6 @@ button {
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Layout */
 .container {
   max-width: 1000px;
   margin: 1.5rem auto;
@@ -60,7 +58,7 @@ button {
 }
 
 .app-header {
-  background-color: #ffffff; /* Putih */
+  background-color: #ffffff;
   color: #333;
   padding: 0.8rem 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -81,7 +79,7 @@ button {
 .app-header h1 {
   font-size: 1.6rem;
   margin: 0;
-  color: #0056b3; /* Biru lebih gelap */
+  color: #0056b3;
 }
 
 .app-navigation ul {
@@ -119,42 +117,40 @@ button {
 }
 
 .logout-button:hover {
-  color: #dc3545; /* Merah untuk logout hover */
+  color: #dc3545;
 }
 
 main {
-  flex-grow: 1; /* Pastikan main content mengisi ruang */
-  padding-top: 1rem; /* Beri jarak dari header */
+  flex-grow: 1;
+  padding-top: 1rem;
   padding-bottom: 2rem;
 }
 
 .app-footer {
-  background-color: #e9ecef; /* Abu-abu muda */
-  color: #6c757d; /* Abu-abu */
+  background-color: #e9ecef;
+  color: #6c757d;
   text-align: center;
   padding: 1rem 0;
-  margin-top: auto; /* Dorong footer ke bawah */
+  margin-top: auto;
   font-size: 0.9em;
 }
 
-/* Accessibility: Skip Link */
 .skip-link {
   position: absolute;
-  top: -100px; /* Sembunyikan di luar layar */
+  top: -100px;
   left: 0;
-  background: #0056b3; /* Warna kontras */
+  background: #0056b3;
   color: white;
   padding: 10px 15px;
-  z-index: 1001; /* Di atas header */
+  z-index: 1001;
   transition: top 0.3s ease-in-out;
   border-bottom-right-radius: 5px;
 }
 
 .skip-link:focus {
-  top: 0; /* Tampilkan saat fokus */
+  top: 0;
 }
 
-/* Loading Indicator */
 .loading-indicator {
   display: flex;
   justify-content: center;
@@ -164,8 +160,7 @@ main {
   color: #555;
 }
 .loading-indicator.global-loading {
-  /* Versi global di main content */
-  min-height: 200px; /* Beri tinggi agar terlihat */
+  min-height: 200px;
 }
 .loading-indicator .spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
@@ -185,10 +180,9 @@ main {
   }
 }
 
-/* Error Message */
 .error-message {
-  color: #dc3545; /* Merah */
-  background-color: #f8d7da; /* Latar belakang merah muda */
+  color: #dc3545;
+  background-color: #f8d7da;
   border: 1px solid #f5c6cb;
   padding: 0.8rem 1.2rem;
   border-radius: 4px;
@@ -202,12 +196,11 @@ main {
   margin-bottom: 1rem;
 }
 
-/* Forms (Login, Register, Add Story) */
 .auth-form,
 .add-story-form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem; /* Jarak antar elemen form */
+  gap: 1.2rem;
 }
 .auth-form .form-group,
 .add-story-form .form-group {
@@ -231,7 +224,7 @@ main {
   font-size: 1rem;
 }
 .add-story-form textarea {
-  resize: vertical; /* Allow vertical resize only */
+  resize: vertical;
   min-height: 80px;
 }
 
@@ -248,8 +241,8 @@ main {
   color: white;
   border: none;
   font-size: 1.1rem;
-  margin-top: 1rem; /* Jarak dari elemen terakhir */
-  align-self: flex-start; /* Tombol tidak full width */
+  margin-top: 1rem;
+  align-self: flex-start;
 }
 .auth-form button[type="submit"]:hover,
 .add-story-form button[type="submit"]:hover {
@@ -267,7 +260,6 @@ main {
   text-align: center;
 }
 
-/* Add Story Page Specific Styles */
 .add-story-form fieldset {
   border: 1px solid #e0e0e0;
   border-radius: 6px;
@@ -282,12 +274,12 @@ main {
 .camera-section .camera-area {
   position: relative;
   width: 100%;
-  max-width: 400px; /* Batasi lebar area kamera/preview */
-  aspect-ratio: 4 / 3; /* Rasio 4:3 umum */
+  max-width: 400px;
+  aspect-ratio: 4 / 3;
   background-color: #eee;
   border: 1px solid #ccc;
-  margin: 0 auto 1rem auto; /* Tengahkan dan beri margin bawah */
-  overflow: hidden; /* Sembunyikan bagian video yang meluap */
+  margin: 0 auto 1rem auto;
+  overflow: hidden;
   border-radius: 4px;
 }
 .camera-section video,
@@ -295,7 +287,7 @@ main {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Cover area, mungkin terpotong */
+  object-fit: cover;
 }
 .camera-controls {
   display: flex;
@@ -309,10 +301,15 @@ main {
   gap: 0.5rem;
 }
 .form-group-checkbox input[type="checkbox"] {
-  width: auto; /* Ukuran checkbox default */
+  width: auto;
 }
+
+iframe {
+  display: none;
+}
+
 .map-picker {
-  height: 300px; /* Tinggi peta untuk memilih lokasi */
+  height: 300px;
   width: 100%;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -325,7 +322,6 @@ main {
   margin-top: 0.5rem;
 }
 .map-info {
-  /* Styling untuk info di peta Leaflet */
   padding: 6px 8px;
   font: 14px/16px Arial, Helvetica, sans-serif;
   background: white;
@@ -334,13 +330,12 @@ main {
   border-radius: 5px;
 }
 
-/* Home Page: Story List */
 .stories-list {
   display: grid;
   grid-template-columns: repeat(
     auto-fill,
     minmax(280px, 1fr)
-  ); /* Grid responsif */
+  );
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
@@ -363,13 +358,13 @@ main {
 
 .story-item__image {
   width: 100%;
-  height: 200px; /* Tinggi gambar tetap */
-  object-fit: cover; /* Pastikan gambar mengisi area tanpa distorsi */
+  height: 200px;
+  object-fit: cover;
 }
 
 .story-item__content {
   padding: 1rem;
-  flex-grow: 1; /* Konten mengisi sisa ruang */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
@@ -383,31 +378,29 @@ main {
 .story-item__date,
 .story-item__location {
   font-size: 0.85em;
-  color: #6c757d; /* Abu-abu */
+  color: #6c757d;
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 0.4rem; /* Jarak ikon dan teks */
+  gap: 0.4rem;
 }
 .story-item__description {
   margin-bottom: 0.8rem;
-  flex-grow: 1; /* Deskripsi mengisi ruang tersisa */
-  overflow: hidden; /* Sembunyikan teks berlebih */
-  display: -webkit-box; /* Untuk text ellipsis multi-baris (opsional) */
-  -webkit-line-clamp: 3; /* Batasi 3 baris */
+  flex-grow: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
-/* Home Page: Map Display */
 .map-display {
-  height: 400px; /* Tinggi peta di halaman home */
+  height: 400px;
   width: 100%;
   border: 1px solid #ccc;
   border-radius: 8px;
   margin-top: 1rem;
 }
 
-/* Leaflet Popup Styling */
 .leaflet-popup-content-wrapper {
   border-radius: 6px;
 }
@@ -422,9 +415,8 @@ main {
   margin-top: 8px;
   border-radius: 4px;
 }
-/* Styling untuk Leaflet Layer Control */
 .leaflet-control-layers-toggle {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEASURBVEhLY2RAA4pf/v9/w9T/mfH//z/DGEAATZgA9f8/GH3/Y/j/759hnIEAYrqA4f9/MPz/D8PM/zAKYAAmCDD8/w/D/38/GD4fYdBgBDQAJwgw/P8Pw///Mfj/HwYYwwAagBEEDYALkPD/Pwx//xn+//9n+P8fYQCQAhgGLgET/v8Hw/9/GP7/+/8ZwRYACbAGHrAGHvj/HwYsgAlA+gA8QMX/fwzG/xl+//9n+P//j+H///8MwwAGcQwAbADMP/8z/P+fgYGAgYGBgAGQEP8ZgAAAEwEMMAAEU4Dmn38Znv/PjAAj4///M/x/A0ECAgAARkB8A7p8h9kAAAAASUVORK5CYII="); /* Simple layers icon */
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEASURBVEhLY2RAA4pf/v9/w9T/mfH//z/DGEAATZgA9f8/GH3/Y/j/759hnIEAYrqA4f9/MPz/D8PM/zAKYAAmCDD8/w/D/38/GD4fYdBgBDQAJwgw/P8Pw///Mfj/HwYYwwAagBEEDYALkPD/Pwx//xn+//9n+P8fYQCQAhgGLgET/v8Hw/9/GP7/+/8ZwRYACbAGHrAGHvj/HwYsgAlA+gA8QMX/fwzG/xl+//9n+P//j+H///8MwwAGcQwAbADMP/8z/P+fgYGAgYGBgAGQEP8ZgAAAEwEMMAAEU4Dmn38Znv/PjAAj4///M/x/A0ECAgAARkB8A7p8h9kAAAAASUVORK5CYII=");
   width: 30px !important;
   height: 30px !important;
 }
@@ -440,9 +432,8 @@ main {
   gap: 5px;
 }
 
-/* Mobile Menu Button */
 .header__menu {
-  display: none; /* Sembunyikan di layar besar */
+  display: none;
   font-size: 2rem;
   background: none;
   border: none;
@@ -450,9 +441,7 @@ main {
   padding: 0.2rem 0.5rem;
 }
 
-/* Utility Classes */
 .sr-only {
-  /* Screen reader only */
   position: absolute;
   width: 1px;
   height: 1px;
@@ -464,7 +453,6 @@ main {
   border: 0;
 }
 .button {
-  /* Generic button styles */
   padding: 0.6em 1.2em;
   border-radius: 4px;
   border: 1px solid #ccc;
@@ -475,7 +463,6 @@ main {
   background-color: #e0e0e0;
 }
 .button i {
-  /* Icon spacing */
   margin-right: 0.5em;
 }
 .button-primary {
@@ -497,28 +484,27 @@ main {
   border-color: #1e7e34;
 }
 
-/* Responsiveness */
 @media (max-width: 768px) {
   .app-header__content {
-    position: relative; /* For absolute positioning of nav */
+    position: relative;
   }
   .header__menu {
-    display: block; /* Tampilkan tombol menu */
+    display: block;
   }
   .app-navigation {
     position: absolute;
-    top: 100%; /* Tepat di bawah header */
+    top: 100%;
     left: 0;
     width: 100%;
     background-color: #ffffff;
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
-    max-height: 0; /* Sembunyikan awalnya */
+    max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-out;
     border-top: 1px solid #eee;
   }
   .app-navigation.open {
-    max-height: 300px; /* Tinggi maksimum saat terbuka */
+    max-height: 300px;
   }
 
   .app-navigation ul {
@@ -541,11 +527,11 @@ main {
     width: 100%;
   }
   .app-navigation a::after {
-    display: none; /* Hapus underline effect di mobile nav */
+    display: none;
   }
 
   .stories-list {
-    grid-template-columns: 1fr; /* Satu kolom di mobile */
+    grid-template-columns: 1fr;
   }
   .container {
     margin: 1rem auto;
@@ -553,13 +539,6 @@ main {
   }
 }
 
-/* View Transition API Styling (Kriteria Opsional 3) */
-/*
-   Kita mengomentari animasi CSS default agar animasi dari
-   Web Animations API (element.animate()) di view-transition.js
-   yang mengambil alih atau berjalan sendiri. Browser akan
-   melakukan cross-fade dasar secara default.
-*/
 
 @keyframes fade-in {
   from {
@@ -582,29 +561,25 @@ main {
 }
 
 .story-item-link {
-  display: block; /* Agar link mengisi seluruh area grid */
+  display: block;
   text-decoration: none;
-  color: inherit; /* Warisi warna teks dari body/parent */
-  border-radius: 8px; /* Samakan dengan border-radius item */
-  transition: box-shadow 0.2s ease; /* Transisi shadow saat hover/focus */
+  color: inherit;
+  border-radius: 8px;
+  transition: box-shadow 0.2s ease;
 }
 .story-item-link:hover,
 .story-item-link:focus {
-  outline: none; /* Hapus outline default */
+  outline: none;
 }
 .story-item-link:hover .story-item,
 .story-item-link:focus .story-item {
-  /* Efek visual saat hover/focus pada link */
   transform: translateY(-5px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
 }
 .story-item {
-  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Pindahkan transisi ke item */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-/* Hapus transisi hover dari item itu sendiri jika sudah ada */
-/* .story-item:hover { ... } */
 
-/* Styling Halaman Detail */
 .detail-container {
   padding-top: 1rem;
 }
@@ -623,7 +598,7 @@ main {
   color: #0056b3;
 }
 .story-detail {
-  background-color: #fff; /* Mungkin tidak perlu jika container sudah putih */
+  background-color: #fff;
 }
 .story-detail h2 {
   margin-bottom: 1rem;
@@ -633,11 +608,11 @@ main {
 }
 .story-detail__image {
   width: 100%;
-  max-height: 500px; /* Batasi tinggi gambar */
-  object-fit: contain; /* Tampilkan seluruh gambar, mungkin ada ruang kosong */
+  max-height: 500px;
+  object-fit: contain;
   margin-bottom: 1.5rem;
   border-radius: 8px;
-  background-color: #f8f9fa; /* Latar belakang jika gambar transparan */
+  background-color: #f8f9fa;
 }
 .story-detail__content {
   line-height: 1.7;
@@ -645,7 +620,7 @@ main {
 .story-detail__description {
   font-size: 1.1em;
   margin-bottom: 1rem;
-  white-space: pre-wrap; /* Jaga format spasi dan baris baru */
+  white-space: pre-wrap;
 }
 .story-detail__date {
   font-size: 0.9em;
@@ -664,7 +639,7 @@ main {
   color: #444;
 }
 #detailStoryMap {
-  height: 350px; /* Sesuaikan tinggi peta detail */
+  height: 350px;
 }
 .coordinates-info {
   font-size: 0.9em;
@@ -679,18 +654,7 @@ main {
 }
 
 .camera-error {
-  margin-top: 0.5rem; /* Beri jarak dari area kamera */
-  margin-bottom: 1rem; /* Beri jarak ke tombol */
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
   text-align: center;
-}
-
-.map-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 999; /* Lebih tinggi dari Leaflet map */
-  background: transparent;
-  pointer-events: all; /* Ini yang bikin interaksi ke map diblok */
 }

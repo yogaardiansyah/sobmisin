@@ -6,7 +6,6 @@ const API_ENDPOINT = {
   STORIES: `${BASE_URL}/stories`,
   STORIES_GUEST: `${BASE_URL}/stories/guest`,
   DETAIL_STORY: (id) => `${BASE_URL}/stories/${id}`,
-  // Tambahkan endpoint notifikasi jika diperlukan
 };
 
 export default API_ENDPOINT;

@@ -1,5 +1,4 @@
-// src/js/view/pages/detail-page.js
-import { formatDate } from '../templates/story-item-template.js'; // Impor fungsi format tanggal
+import { formatDate } from '../templates/story-item-template.js';
 
 const DetailPage = {
     render(story) {
@@ -33,7 +32,6 @@ const DetailPage = {
             </div>
         `;
     }
-    // Setup peta akan dilakukan oleh presenter setelah render
 };
 
 export default DetailPage;

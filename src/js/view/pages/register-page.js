@@ -1,5 +1,4 @@
-// src/js/view/pages/register-page.js
-import Swal from 'sweetalert2'; // Import Swal
+import Swal from 'sweetalert2';
 
 const RegisterPage = {
     render() {
@@ -35,7 +34,7 @@ const RegisterPage = {
         const nameInput = document.getElementById('name');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
-        const errorMessageDiv = document.getElementById('registerErrorMessage'); // ID spesifik
+        const errorMessageDiv = document.getElementById('registerErrorMessage');
         const submitButton = document.getElementById('registerSubmitButton');
         const buttonText = submitButton.querySelector('.button-text');
         const buttonLoading = submitButton.querySelector('.button-loading');
@@ -44,7 +43,7 @@ const RegisterPage = {
         if (form && authPresenter) {
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
-                errorMessageDiv.style.display = 'none'; // Sembunyikan error lama
+                errorMessageDiv.style.display = 'none';
                 const name = nameInput.value;
                 const email = emailInput.value;
                 const password = passwordInput.value;
@@ -53,7 +52,6 @@ const RegisterPage = {
         }
 
           RegisterPage.viewUtils = {
-             // --- Perubahan showLoading ---
              showLoading: () => {
                   if (submitButton) submitButton.disabled = true;
                   if (buttonText) buttonText.style.display = 'none';
@@ -64,13 +62,11 @@ const RegisterPage = {
                   if (buttonText) buttonText.style.display = 'inline';
                   if (buttonLoading) buttonLoading.style.display = 'none';
              },
-             // --- Perubahan showError ---
              showError: (message) => {
                   if (errorMessageDiv) {
                       errorMessageDiv.textContent = message;
                       errorMessageDiv.style.display = 'block';
                   }
-                  // Atau: Swal.fire('Registration Failed', message, 'error');
              },
              clearError: () => {
                   if (errorMessageDiv) {
