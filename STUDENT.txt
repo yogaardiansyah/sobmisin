@@ -1,1 +1,3 @@
 MAPTILER_API_KEY=JLMxlRyYMX9bMXScvs6o
+
+deploy = https://yogaardiansyah.github.io/subinterstory/

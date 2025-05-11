@@ -19,16 +19,25 @@ const MapUtils = {
     cleanupMap(containerId) {
         if (this._mapInstances[containerId]) {
             console.log(`Cleaning up map instance in #${containerId}`);
-            this._mapInstances[containerId].remove();
-            delete this._mapInstances[containerId];
-            
-            const container = document.getElementById(containerId);
-            if (container) {
-                container.innerHTML = '';
-                container.removeAttribute('data-leaflet-internal-id');
-                if (container._leaflet_id !== undefined) {
-                    delete container._leaflet_id;
+            try {
+                this._mapInstances[containerId].remove();
+                delete this._mapInstances[containerId];
+                
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '';
+                    container.removeAttribute('data-leaflet-internal-id');
+                    if (container._leaflet_id !== undefined) {
+                        delete container._leaflet_id;
+                    }
+                    Array.from(container.attributes).forEach(attr => {
+                        if (attr.name.startsWith('data-leaflet')) {
+                            container.removeAttribute(attr.name);
+                        }
+                    });
                 }
+            } catch (e) {
+                console.warn(`Error cleaning up map in #${containerId}:`, e);
             }
             return true;
         }
@@ -40,6 +49,7 @@ const MapUtils = {
         Object.keys(this._mapInstances).forEach(id => {
             this.cleanupMap(id);
         });
+        this._mapInstances = {};
     },
 
     initMap(containerId, options = {}) {
@@ -50,7 +60,10 @@ const MapUtils = {
             throw new Error(`Map container with id "${containerId}" not found.`);
         }
 
-        this.cleanupMap(containerId);
+        if (mapContainer._leaflet_id !== undefined || this._mapInstances[containerId]) {
+            console.warn(`Map container #${containerId} appears to be already initialized. Cleaning up first.`);
+            this.cleanupMap(containerId);
+        }
 
         if (!mapContainer.style.height || mapContainer.style.height === '0px') {
             mapContainer.style.height = '400px';

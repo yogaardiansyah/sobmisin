@@ -1,5 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { InjectManifest } = require('workbox-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const isWatchMode = () => {
+  return process.env.WEBPACK_WATCH === 'true';
+};
 
 module.exports = {
   entry: './src/js/index.js',
@@ -10,10 +16,9 @@ module.exports = {
     clean: true,
   },
 
-
   devServer: {
     static: {
-        directory: path.join(__dirname, 'dist'),
+      directory: path.join(__dirname, 'dist'),
     },
     compress: true,
     port: 9000,
@@ -25,8 +30,8 @@ module.exports = {
       {
         test: /\.css$/i,
         use: [
-            'style-loader',
-            'css-loader'
+          'style-loader',
+          'css-loader'
         ],
       },
       {
@@ -38,12 +43,23 @@ module.exports = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: './index.html',
+      template: './src/index.html',
       filename: 'index.html',
-      inject: 'body',
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'src/assets', to: 'assets' },
+        { from: 'src/manifest.json', to: 'manifest.json' }
+      ]
+    }),
+    ...(!isWatchMode() ? [
+      new InjectManifest({
+        swSrc: './src/sw.js',
+        swDest: 'sw.js',
+        exclude: [/\.map$/, /manifest\.json$/],
+      })
+    ] : []),
   ],
 
-   devtool: 'source-map',
-
+  devtool: 'source-map',
 };
