@@ -19,7 +19,7 @@ class StoryApiSource {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    if (!(options.body instanceof FormData) && !headers['Content-Type']) {
+    if (options.body && !(options.body instanceof FormData) && !headers['Content-Type']) {
       headers['Content-Type'] = 'application/json';
     }
 
@@ -28,6 +28,7 @@ class StoryApiSource {
     }
 
     try {
+      console.log(`Fetching ${options.method || 'GET'} ${url} with headers:`, headers);
       const response = await fetch(url, {
         ...options,
         headers,
@@ -39,23 +40,25 @@ class StoryApiSource {
       try {
         if (contentType && contentType.includes("application/json")) {
             responseData = await response.json();
-        } else if (response.body) {
+        } else if (response.body && response.status !== 204) {
             const textBody = await response.clone().text();
             if (textBody && textBody.trim().startsWith('{')) {
                  try {
                      responseData = JSON.parse(textBody);
                  } catch (parseError) {
-                     console.warn('Received non-JSON response (or parse failed):', textBody.substring(0, 100));
-                     responseData = { message: `Received non-JSON response starting with: ${textBody.substring(0,50)}`};
+                     console.warn('Received non-JSON response that looked like JSON (parse failed):', textBody.substring(0, 100));
+                     responseData = { message: `Received non-JSON response starting with: ${textBody.substring(0,50)}` };
                  }
-            } else if(response.ok && textBody) {
+            } else if (response.ok && textBody) {
                  console.log('Received non-JSON text response:', textBody.substring(0, 100));
-                 responseData = { message: 'Operation successful, non-JSON response received.'};
+                 responseData = { message: 'Operation successful, non-JSON response received.' };
+            } else if (textBody) {
+                responseData = { message: textBody.substring(0, 200) };
             }
         }
       } catch (jsonError) {
-          console.error("Failed to parse JSON response:", jsonError);
-          responseData = { message: response.statusText || `Error parsing response (Status: ${response.status})` };
+          console.error("Failed to parse or read response body:", jsonError);
+          responseData = { message: `Error processing response (Status: ${response.status}) ${response.statusText || ''}`.trim() };
       }
 
 
@@ -72,19 +75,18 @@ class StoryApiSource {
       return responseData;
 
     } catch (error) {
-      console.error(`Fetch error during request to ${url}:`, error);
+      console.error(`Fetch operation error during request to ${url}:`, error.message, error);
       throw new Error(error.message || 'Network error or failed to fetch resource.');
     }
   }
 
-  static async register({ name, email, password }) {
+  static async register({ name, email, password }) { 
     return this._fetchWithAuth(API_ENDPOINT.REGISTER, {
       method: 'POST',
       body: JSON.stringify({ name, email, password }),
       isGuest: true,
     });
   }
-
   static async login({ email, password }) {
     return this._fetchWithAuth(API_ENDPOINT.LOGIN, {
       method: 'POST',
@@ -92,7 +94,6 @@ class StoryApiSource {
       isGuest: true,
     });
   }
-
   static async getAllStories({ page = 1, size = 10, location = 0 } = {}) {
       const queryParams = new URLSearchParams({
           page: page.toString(),
@@ -103,7 +104,6 @@ class StoryApiSource {
           method: 'GET',
       });
   }
-
   static async addNewStory({ description, photo, lat, lon }) {
     const formData = new FormData();
     formData.append('description', description);
@@ -112,13 +112,11 @@ class StoryApiSource {
       formData.append('lat', parseFloat(lat));
       formData.append('lon', parseFloat(lon));
     }
-
     return this._fetchWithAuth(API_ENDPOINT.STORIES, {
       method: 'POST',
       body: formData,
     });
   }
-
   static async addNewStoryGuest({ description, photo, lat, lon }) {
     const formData = new FormData();
     formData.append('description', description);
@@ -133,33 +131,33 @@ class StoryApiSource {
         isGuest: true,
     });
   }
-
   static async getStoryDetail(id) {
     return this._fetchWithAuth(API_ENDPOINT.DETAIL_STORY(id), {
       method: 'GET',
     });
   }
 
-
-
   /**
    * Subscribe to web push notifications.
    * @param {PushSubscription} subscription - The PushSubscription object from the browser's Push API.
    */
   static async subscribeNotification(subscription) {
-      const subscriptionJson = subscription.toJSON();
+    const subscriptionJson = subscription.toJSON();
 
-      const bodyData = {
-          endpoint: subscription.endpoint,
-          keys: subscriptionJson.keys,
-      };
+    const bodyData = {
+        endpoint: subscriptionJson.endpoint,
+        keys: {
+            p256dh: subscriptionJson.keys.p256dh,
+            auth: subscriptionJson.keys.auth,
+        }
+    };
 
-      console.log('Subscribing notification with data:', JSON.stringify(bodyData));
+    console.log('StoryApiSource: Subscribing notification with body (Corrected based on errors):', JSON.stringify(bodyData));
 
-      return this._fetchWithAuth(API_ENDPOINT.NOTIFICATIONS_SUBSCRIBE, {
-          method: 'POST',
-          body: JSON.stringify(bodyData),
-      });
+    return this._fetchWithAuth(API_ENDPOINT.NOTIFICATIONS_SUBSCRIBE, {
+        method: 'POST',
+        body: JSON.stringify(bodyData),
+    });
   }
 
   /**
@@ -168,14 +166,13 @@ class StoryApiSource {
    */
   static async unsubscribeNotification(endpoint) {
        if (!endpoint) {
-           console.error("Subscription endpoint is required to unsubscribe.");
+           console.error("StoryApiSource: Subscription endpoint is required to unsubscribe.");
            throw new Error("Subscription endpoint is required to unsubscribe.");
        }
        const bodyData = { endpoint };
-       console.log('Unsubscribing notification for endpoint:', endpoint);
+       console.log('StoryApiSource: Unsubscribing notification for endpoint:', endpoint, 'with body:', JSON.stringify(bodyData));
 
-
-       const unsubscribeUrl = API_ENDPOINT.NOTIFICATIONS_UNSUBSCRIBE || API_ENDPOINT.NOTIFICATIONS_SUBSCRIBE;
+       const unsubscribeUrl = API_ENDPOINT.NOTIFICATIONS_UNSUBSCRIBE;
 
        return this._fetchWithAuth(unsubscribeUrl, {
            method: 'DELETE',

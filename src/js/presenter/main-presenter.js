@@ -7,6 +7,7 @@ import RegisterPage from '../view/pages/register-page.js';
 import HomePage from '../view/pages/home-page.js';
 import AddStoryPage from '../view/pages/add-story-page.js';
 import DetailPage from '../view/pages/detail-page.js';
+import FavoriteStoriesPage from '../view/pages/favorite-stories-page.js';
 
 import Swal from 'sweetalert2';
 
@@ -19,6 +20,7 @@ class MainPresenter {
             homePageView: HomePage,
             addStoryPageView: AddStoryPage,
             detailPageView: DetailPage,
+            favoriteStoriesPageView: FavoriteStoriesPage,
         });
 
         this._setupNavigationAndLogout();
@@ -65,11 +67,11 @@ class MainPresenter {
                  event.stopPropagation();
                  nav.classList.toggle('open');
              });
-             document.body.addEventListener('click', () => {
-                 nav.classList.remove('open');
-             });
              nav.addEventListener('click', (event) => {
-                 event.stopPropagation();
+                if (event.target.tagName === 'A' || event.target.closest('A')) {
+                    nav.classList.remove('open');
+                }
+                event.stopPropagation();
              });
          }
     }
@@ -78,6 +80,7 @@ class MainPresenter {
         const isLoggedIn = AuthModel.isLoggedIn();
         const logoutButton = document.getElementById('logoutButton');
         const navLinks = document.querySelectorAll('#navigationDrawer ul li a');
+        const favoriteLink = document.querySelector('#navigationDrawer ul li a[href="#/favorites"]');
 
         if (logoutButton) {
             logoutButton.style.display = isLoggedIn ? 'block' : 'none';
@@ -89,10 +92,14 @@ class MainPresenter {
                  link.parentElement.style.display = isLoggedIn ? 'none' : 'list-item';
              }
         });
+        
+        if (favoriteLink) {
+            favoriteLink.parentElement.style.display = isLoggedIn ? 'list-item' : 'none';
+        }
+
 
         const nav = document.getElementById('navigationDrawer');
-        if (nav) {
-            nav.classList.remove('open');
+        if (nav && nav.classList.contains('open')) {
         }
     }
 
@@ -109,6 +116,7 @@ class MainPresenter {
              () => LoginPage.render(),
              () => LoginPage.setupEventListeners(this._authPresenter)
          );
+         this._updateNavigation();
     }
 
     showRegisterPage() {
@@ -117,16 +125,19 @@ class MainPresenter {
             () => RegisterPage.render(),
             () => RegisterPage.setupEventListeners(this._authPresenter)
         );
+        this._updateNavigation();
     }
 
     showHomePage() {
          this._cleanupCurrentPage();
          this._storyPresenter.displayHomePage();
+         this._updateNavigation();
     }
 
     showAddStoryPage() {
          this._cleanupCurrentPage();
          this._storyPresenter.displayAddStoryPage();
+         this._updateNavigation();
     }
 
     showDetailPage(storyId) {
@@ -137,12 +148,20 @@ class MainPresenter {
         }
          this._cleanupCurrentPage();
          this._storyPresenter.displayDetailPage(storyId);
+         this._updateNavigation();
      }
+    
+    showFavoriteStoriesPage() {
+        this._cleanupCurrentPage();
+        this._storyPresenter.displayFavoriteStoriesPage();
+        this._updateNavigation();
+    }
 
 
      showNotFoundPage() {
          this._cleanupCurrentPage();
          this._mainView.renderPage(() => '<div class="container"><h2>404 - Page Not Found</h2><p>The page you requested does not exist.</p><a href="#/home">Go Home</a></div>');
+         this._updateNavigation();
      }
 }
 

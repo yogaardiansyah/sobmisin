@@ -658,3 +658,46 @@ iframe {
   margin-bottom: 1rem;
   text-align: center;
 }
+
+
+
+.app-navigation ul li .nav-button {
+    background-color: transparent;
+    color: #007bff;
+    border: 1px solid #007bff;
+    padding: 6px 12px;
+    font-size: 0.9em;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+    margin-left: 10px;
+}
+
+.app-navigation ul li .nav-button:hover,
+.app-navigation ul li .nav-button:focus {
+    background-color: #007bff;
+    color: white;
+}
+
+.app-navigation ul li .nav-button.button-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.app-navigation ul li .nav-button.button-secondary:hover,
+.app-navigation ul li .nav-button.button-secondary:focus {
+    background-color: #6c757d;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .app-navigation ul li {
+        display: block;
+        width: 100%;
+    }
+    .app-navigation ul li .nav-button {
+        width: calc(100% - 20px);
+        margin: 5px 10px;
+        text-align: center;
+    }
+}

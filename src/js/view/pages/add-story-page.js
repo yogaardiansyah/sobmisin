@@ -42,7 +42,7 @@ const AddStoryPage = {
                     </button>
                 </form>
             </div>
-        `;
+        `;1
     }
 };
 

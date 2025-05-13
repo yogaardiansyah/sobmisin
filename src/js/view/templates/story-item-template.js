@@ -1,22 +1,23 @@
-// src/js/view/templates/story-item-template.js
 
-// Pisahkan fungsi format tanggal agar bisa diimpor ke DetailPage
 export function formatDate(dateString) {
   if (!dateString) return 'N/A';
   try {
       const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-      return new Date(dateString).toLocaleDateString('id-ID', options); // Gunakan locale ID
+      return new Date(dateString).toLocaleDateString('id-ID', options);
   } catch (e) {
       console.error("Failed to format date:", dateString, e);
       return dateString;
   }
 }
 
-// Modifikasi template untuk menjadi link
-const createStoryItemTemplate = (story) => `
-<a href="#/detail/${story.id}" class="story-item-link">
-    <article class="story-item">
-      <img src="${story.photoUrl}" alt="Story image from ${story.name}: ${story.description.substring(0, 30)}..." class="story-item__image">
+const createStoryItemTemplate = (story, isFavorite = false) => `
+<article class="story-item" id="story-item-${story.id}">
+    <a href="#/detail/${story.id}" class="story-item-main-link" aria-label="View details for story by ${story.name || 'Anonymous'}">
+      <img 
+        src="${story.photoUrl}" 
+        alt="Story image from ${story.name}: ${story.description ? story.description.substring(0, 30) : 'No description'}..." 
+        class="story-item__image" 
+        loading="lazy">
       <div class="story-item__content">
         <h4 class="story-item__name">${story.name || 'Anonymous'}</h4>
         <p class="story-item__date">
@@ -30,8 +31,18 @@ const createStoryItemTemplate = (story) => `
           </p>
         ` : '<p class="story-item__location"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> No Location</p>'}
       </div>
-    </article>
-</a>
+    </a>
+    <div class="story-item__actions">
+        <button 
+            class="button button-small button-favorite ${isFavorite ? 'favorited' : ''}" 
+            data-story-id="${story.id}" 
+            aria-pressed="${isFavorite ? 'true' : 'false'}" 
+            aria-label="${isFavorite ? `Remove ${story.name}'s story from favorites` : `Save ${story.name}'s story to favorites`}">
+            <i class="${isFavorite ? 'fas' : 'far'} fa-heart" aria-hidden="true"></i> 
+            <span>${isFavorite ? 'Unsave' : 'Save'}</span>
+        </button>
+    </div>
+</article>
 `;
 
 export default createStoryItemTemplate;

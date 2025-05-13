@@ -1,3 +1,4 @@
+
 import CONFIG from '../config/config.js';
 
 if (typeof L === 'undefined') {
@@ -17,39 +18,41 @@ const MapUtils = {
     _mapTilerAttribution: '© <a href="https://www.maptiler.com/copyright/" target="_blank">MapTiler</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
 
     cleanupMap(containerId) {
-        if (this._mapInstances[containerId]) {
-            console.log(`Cleaning up map instance in #${containerId}`);
+        const mapInstance = this._mapInstances[containerId];
+        const container = document.getElementById(containerId);
+
+        if (mapInstance) {
+            console.log(`MapUtils: Cleaning up ACTIVE map instance in #${containerId}`);
             try {
-                this._mapInstances[containerId].remove();
+                mapInstance.remove();
                 delete this._mapInstances[containerId];
-                
-                const container = document.getElementById(containerId);
-                if (container) {
-                    container.innerHTML = '';
-                    container.removeAttribute('data-leaflet-internal-id');
-                    if (container._leaflet_id !== undefined) {
-                        delete container._leaflet_id;
-                    }
-                    Array.from(container.attributes).forEach(attr => {
-                        if (attr.name.startsWith('data-leaflet')) {
-                            container.removeAttribute(attr.name);
-                        }
-                    });
-                }
             } catch (e) {
-                console.warn(`Error cleaning up map in #${containerId}:`, e);
+                console.warn(`MapUtils: Error removing active map instance in #${containerId}:`, e);
             }
-            return true;
+        } else if (container && container._leaflet_id) {
+            console.warn(`MapUtils: Container #${containerId} has _leaflet_id but no active instance. Attempting DOM cleanup.`);
         }
-        return false;
+
+
+        if (!mapInstance && !(container && container._leaflet_id)) {
+        }
     },
 
     cleanupAllMaps() {
-        console.log('Cleaning up all map instances');
+        console.log('MapUtils: Cleaning up ALL active map instances...');
         Object.keys(this._mapInstances).forEach(id => {
-            this.cleanupMap(id);
+            const mapInstance = this._mapInstances[id];
+            if (mapInstance) {
+                try {
+                    console.log(`MapUtils: Removing map in #${id} during cleanupAllMaps.`);
+                    mapInstance.remove();
+                } catch (e) {
+                    console.warn(`MapUtils: Error removing map in #${id} during cleanupAllMaps:`, e);
+                }
+            }
         });
         this._mapInstances = {};
+        console.log('MapUtils: All map instances removed from internal tracking.');
     },
 
     initMap(containerId, options = {}) {
@@ -60,17 +63,21 @@ const MapUtils = {
             throw new Error(`Map container with id "${containerId}" not found.`);
         }
 
-        if (mapContainer._leaflet_id !== undefined || this._mapInstances[containerId]) {
-            console.warn(`Map container #${containerId} appears to be already initialized. Cleaning up first.`);
+        if (this._mapInstances[containerId]) {
+            console.warn(`MapUtils: Active instance for #${containerId} found. Cleaning up first.`);
             this.cleanupMap(containerId);
+        } else if (mapContainer._leaflet_id) {
+            console.warn(`MapUtils: Container #${containerId} has _leaflet_id but no active instance in tracking. Forcing DOM cleanup.`);
+            mapContainer.innerHTML = '';
+            delete mapContainer._leaflet_id;
         }
+
 
         if (!mapContainer.style.height || mapContainer.style.height === '0px') {
             mapContainer.style.height = '400px';
-            console.log(`Set default height for map container #${containerId}`);
         }
 
-        const mapOptions = {
+        const mapOptions = { 
             ...options,
             center: options.center || this._defaultCenter,
             zoom: options.zoom || this._defaultZoom,
@@ -80,108 +87,97 @@ const MapUtils = {
             doubleClickZoom: options.doubleClickZoom !== undefined ? options.doubleClickZoom : true
         };
 
+
         if (!Array.isArray(mapOptions.center) || mapOptions.center.length !== 2) {
             throw new Error("Invalid map center provided.");
         }
-
         if (typeof mapOptions.zoom !== 'number') {
             throw new Error("Invalid map zoom level.");
         }
 
+        let map;
         try {
-            const map = L.map(containerId, mapOptions);
-            
+            console.log(`MapUtils: Initializing new map in #${containerId}`);
+            map = L.map(containerId, mapOptions);
             this._mapInstances[containerId] = map;
 
             const osmLayer = L.tileLayer(this._osmLayerUrl, {
-                attribution: this._osmLayerAttribution,
-                maxZoom: 19,
+                attribution: this._osmLayerAttribution, maxZoom: 19,
             });
 
-            const baseLayers = {
-                "OpenStreetMap": osmLayer,
-            };
+            const baseLayers = { "OpenStreetMap": osmLayer };
 
             const mapTilerApiKeyExists = CONFIG.MAPTILER_API_KEY && CONFIG.MAPTILER_API_KEY !== 'YOUR_MAPTILER_API_KEY_HERE';
             if (mapTilerApiKeyExists) {
                 const mapTilerLayer = L.tileLayer(this._mapTilerStreetsV2Url, {
-                    attribution: this._mapTilerAttribution,
-                    maxZoom: 19,
+                    attribution: this._mapTilerAttribution, maxZoom: 19,
                 });
                 baseLayers["MapTiler Streets"] = mapTilerLayer;
-                console.log("MapTiler layer added to options.");
-            } else {
-                console.warn("MapTiler API Key not found or is placeholder. Skipping MapTiler layer.");
             }
-
             osmLayer.addTo(map);
 
             if (Object.keys(baseLayers).length > 1) {
                 L.control.layers(baseLayers).addTo(map);
-                console.log("Layer control added to map.");
             }
 
-            console.log(`Map initialized in #${containerId}`);
+
+            console.log(`MapUtils: Map initialized successfully in #${containerId}`);
             
             setTimeout(() => {
-                map.invalidateSize();
-                console.log(`Map dragging enabled: ${map.dragging.enabled()}`);
-            }, 300);
+                if (this._mapInstances[containerId] && this._mapInstances[containerId].invalidateSize) {
+                    this._mapInstances[containerId].invalidateSize();
+                }
+            }, 150);
 
             return map;
         } catch (error) {
-            console.error(`Failed to initialize map in #${containerId}:`, error);
+            console.error(`MapUtils: Failed to initialize map in #${containerId}:`, error);
+            if (map && this._mapInstances[containerId]) {
+                delete this._mapInstances[containerId];
+            }
             throw error;
         }
     },
 
+    
     addMarkers(map, stories) {
         if (!map) {
-            console.error("Map instance is required to add markers.");
-            return;
+            console.error("Map instance is required to add markers."); return;
         }
-
         if (typeof L === 'undefined') throw new Error("Leaflet not loaded");
 
-        console.log(`Adding ${stories.length} markers to the map.`);
         stories.forEach(story => {
             if (story.lat && story.lon) {
                 const marker = L.marker([story.lat, story.lon]).addTo(map);
                 marker.bindPopup(`
-                    <b>${story.name}</b><br>
-                    ${story.description.substring(0, 50)}...<br>
-                    <img src="${story.photoUrl}" alt="Thumb ${story.name}" width="50" style="margin-top: 5px;">
+                    <b>${story.name || 'Story'}</b><br>
+                    ${story.description ? story.description.substring(0, 50) : 'No description'}...<br>
+                    <img src="${story.photoUrl}" alt="Thumb ${story.name}" width="50" style="margin-top: 5px; border-radius: 3px;">
                 `);
             }
         });
     },
 
     initLocationPickerMap(containerId, onClickCallback) {
-        if (typeof L === 'undefined') throw new Error("Leaflet not loaded");
-
         const map = this.initMap(containerId, { 
             scrollWheelZoom: true, 
             dragging: true 
         });
 
-        const layerControl = map.zoomControl?.getContainer()?.parentElement?.querySelector('.leaflet-control-layers');
-        if (layerControl) {
-            layerControl.remove();
-            console.log("Layer control removed from location picker map for simplicity.");
+        const layerControlContainer = map.getContainer().querySelector('.leaflet-control-layers');
+        if (layerControlContainer) {
+            layerControlContainer.remove();
         }
 
         let tempMarker = null;
 
         map.on('click', (e) => {
             const coords = e.latlng;
-            console.log('Map clicked at:', coords);
-
             if (tempMarker) {
                 map.removeLayer(tempMarker);
             }
-
             tempMarker = L.marker(coords).addTo(map)
-                .bindPopup(`Selected Location: ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}`)
+                .bindPopup(`Selected: ${coords.lat.toFixed(5)}, ${coords.lng.toFixed(5)}`)
                 .openPopup();
 
             if (typeof onClickCallback === 'function') {
@@ -189,9 +185,9 @@ const MapUtils = {
             }
         });
 
-        const info = L.control();
+        const info = L.control({position: 'bottomleft'});
         info.onAdd = function () {
-            this._div = L.DomUtil.create('div', 'map-info');
+            this._div = L.DomUtil.create('div', 'map-info-picker');
             this.update();
             return this._div;
         };
@@ -199,13 +195,14 @@ const MapUtils = {
             this._div.innerHTML = 'Click on the map to pick a location';
         };
         info.addTo(map);
-
+        
         setTimeout(() => {
-            map.invalidateSize();
-            console.log(`Location picker map dragging enabled: ${map.dragging.enabled()}`);
-        }, 300);
+             if (this._mapInstances[containerId] && this._mapInstances[containerId].invalidateSize) {
+                this._mapInstances[containerId].invalidateSize();
+             }
+        }, 150);
 
-        console.log(`Location picker map initialized in #${containerId}`);
+        console.log(`MapUtils: Location picker map initialized in #${containerId}`);
         return map;
     }
 };
